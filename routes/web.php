@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KoperasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,9 +63,27 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // --- KELOMPOK HAK AKSES: KOPERASI (EKSTERNAL) ---
 Route::middleware(['auth', 'role:koperasi'])->group(function () {
-    Route::get('/koperasi/dashboard', function () { 
-        return view('koperasi.dashboard'); 
-    })->name('koperasi.dashboard');
+    
+    // 1. Dashboard Koperasi (DIBAIKI: Sekarang memanggil method dashboard di KoperasiController)
+    Route::get('/koperasi/dashboard', [KoperasiController::class, 'dashboard'])->name('koperasi.dashboard');
+
+    // 2. Menu Profil Koperasi (DISEMPURNAKAN: Sesuai struktur view profil baru)
+    Route::get('/koperasi/profil', [KoperasiController::class, 'profil'])->name('koperasi.profil');
+    Route::get('/koperasi/profil/edit', [KoperasiController::class, 'profilEdit'])->name('koperasi.profil.edit');
+    Route::put('/koperasi/profil/update', [KoperasiController::class, 'updateProfil'])->name('koperasi.profil.update');
+
+    // 3. Menu Penilaian Kesehatan (Pemkes) (DISEMPURNAKAN: Sesuai struktur view pemkes baru)
+    Route::get('/koperasi/pemkes', [KoperasiController::class, 'pemkesIndex'])->name('koperasi.pemkes.index');
+    Route::get('/koperasi/pemkes/create', [KoperasiController::class, 'pemkesCreate'])->name('koperasi.pemkes.create');
+    Route::get('/koperasi/pemkes/{id}/edit', [KoperasiController::class, 'pemkesEdit'])->name('koperasi.pemkes.edit');
+    Route::post('/koperasi/pemkes/store', [KoperasiController::class, 'pemkesStore'])->name('koperasi.pemkes.store');
+
+    // 4. Menu Pelaksanaan RAT (DISEMPURNAKAN: Sesuai struktur view rat baru & menyelesaikan error)
+    Route::get('/koperasi/rat', [KoperasiController::class, 'ratIndex'])->name('koperasi.rat.index');
+    Route::get('/koperasi/rat/create', [KoperasiController::class, 'ratCreate'])->name('koperasi.rat.create');
+    Route::get('/koperasi/rat/{id}/edit', [KoperasiController::class, 'ratEdit'])->name('koperasi.rat.edit');
+    Route::post('/koperasi/rat/store', [KoperasiController::class, 'ratStore'])->name('koperasi.rat.store');
+    
 });
 
 // --- KELOMPOK HAK AKSES: PENGAWAS LAPANGAN ---

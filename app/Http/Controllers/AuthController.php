@@ -40,9 +40,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validasi input form login
+        // KOREKSI: Validasi input form login menggunakan email, bukan username
         $credentials = $request->validate([
-            'username' => 'required|string',
+            'email'    => 'required|string|email',
             'password' => 'required|string',
         ]);
 
@@ -63,10 +63,10 @@ class AuthController extends Controller
             };
         }
 
-        // Jika login gagal, kembalikan dengan pesan error
+        // KOREKSI: Jika login gagal, kembalikan dengan pesan error berbasis email
         return back()->withErrors([
-            'username' => 'Username atau password yang Anda masukkan salah.',
-        ])->onlyInput('username');
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
     }
 
     /**
@@ -76,11 +76,10 @@ class AuthController extends Controller
     {
         // Validasi seluruh input form gabungan pendaftaran koperasi
         $request->validate([
-            // Validasi untuk tabel 'user'
-            'username'           => 'required|string|max:255|unique:user,username',
-            'email'              => 'required|string|email|max:255|unique:user,email',
-            'password'           => 'required|string|min:8|confirmed',
-            'no_telp'            => 'required|string|max:15',
+            // KOREKSI: Menghilangkan username, validasi email dan data user utama
+            'email'               => 'required|string|email|max:255|unique:user,email',
+            'password'            => 'required|string|min:8|confirmed',
+            'no_telp'             => 'required|string|max:15',
             
             // Validasi untuk tabel 'koperasi'
             'nama_koperasi'       => 'required|string|max:255',
@@ -97,9 +96,8 @@ class AuthController extends Controller
         // Menggunakan Database Transaction demi keamanan data bertingkat
         DB::transaction(function () use ($request) {
             
-            // Langkah A: Simpan data kredensial login ke tabel 'user'
+            // Langkah A: Simpan data kredensial login ke tabel 'user' (Tanpa kolom username)
             $user = User::create([
-                'username' => $request->username,
                 'email'    => $request->email,
                 'password' => Hash::make($request->password), // Password wajib di-hash!
                 'no_telp'  => $request->no_telp,

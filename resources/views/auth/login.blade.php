@@ -39,12 +39,12 @@
             @csrf
 
             <div>
-                <label for="username" class="block text-[11px] font-bold text-teal-400/90 uppercase tracking-widest mb-2.5 px-1">
-                    Username
+                <label for="email" class="block text-[11px] font-bold text-teal-400/90 uppercase tracking-widest mb-2.5 px-1">
+                    Email Address
                 </label>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" required
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required
                     class="w-full px-6 py-3.5 bg-white text-slate-900 rounded-full font-semibold focus:outline-none focus:ring-4 focus:ring-cyan-500/20 border border-transparent focus:border-teal-400/30 transition duration-300 placeholder:text-slate-400 text-sm" 
-                    placeholder="Masukkan username">
+                    placeholder="Masukkan alamat email">
             </div>
 
             <div>

@@ -37,42 +37,52 @@
 
                 <div class="hidden md:flex items-center space-x-1">
                     
+                    {{-- 1. NAVIGASI AKTOR: ADMIN DINAS --}}
                     @if(auth()->user()->role === 'admin')
                         <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('admin.dashboard') ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Validasi Koperasi
+                            Monitoring RAT
+                        </a>
+                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                            Rekap Laporan
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
                             Kelola User
                         </a>
                     @endif
 
+                    {{-- 2. NAVIGASI AKTOR: KOPERASI --}}
                     @if(auth()->user()->role === 'koperasi')
                         <a href="{{ route('koperasi.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.dashboard') ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Input Laporan RAT
+                            Profil Koperasi
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Profil Koperasi
+                            Penilaian Kesehatan
+                        </a>
+                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                            Pelaksanaan RAT
                         </a>
                     @endif
 
+                    {{-- 3. NAVIGASI AKTOR: PENGAWAS LAPANGAN --}}
                     @if(auth()->user()->role === 'pengawas')
                         <a href="{{ route('pengawas.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('pengawas.dashboard') ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Pemeriksaan
+                            Daftar Koperasi
                         </a>
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Rekomendasi
+                            Periksa Lapangan
                         </a>
                     @endif
 
+                    {{-- 4. NAVIGASI AKTOR: PA KADIS (KEPALA DINAS) --}}
                     @if(auth()->user()->role === 'kadis')
                         <a href="{{ route('kadis.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('kadis.dashboard') ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
                             Dashboard
@@ -80,8 +90,9 @@
                         <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
                             Grafik Monitoring
                         </a>
-                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                            Laporan Akhir
+                        {{-- Menu Otoritas Utama: Verifikasi & Rubah Status Berkas Laporan Kerja --}}
+                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-teal-400 bg-teal-950/30 border border-teal-500/20 hover:bg-teal-950/60 transition">
+                            Persetujuan Laporan
                         </a>
                     @endif
 
@@ -89,7 +100,8 @@
 
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
-                        <p class="text-xs font-bold text-slate-200">{{ auth()->user()->username }}</p>
+                        {{-- KOREKSI SINKRONISASI: Mengubah properti username menjadi nama_lengkap --}}
+                        <p class="text-xs font-bold text-slate-200">{{ auth()->user()->nama_lengkap }}</p>
                         <p class="text-[10px] font-medium text-teal-400/80 uppercase tracking-wider">{{ auth()->user()->role }}</p>
                     </div>
                     
