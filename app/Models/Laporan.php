@@ -12,11 +12,13 @@ class Laporan extends Model
 
     protected $fillable = [
         'id_RAT',
-        'id_user', // Mencatat Admin pembuat rekap
-        'id_kadis', // Mencatat Kadis peninjau laporan
+        'id_user',
+        'id_kadis',
         'jenis_laporan',
         'tanggal_laporan',
         'file_laporan',
+        'status_laporan',
+        'catatan_revisi',
     ];
 
     public function rat(): BelongsTo
@@ -30,9 +32,9 @@ class Laporan extends Model
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    // Relasi balik ke Kepala Dinas
+    // Relasi balik ke Kepala Dinas (Langsung ke induk User)
     public function kepala_dinas(): BelongsTo
     {
-        return $this->belongsTo(KepalaDinas::class, 'id_kadis', 'id_kadis');
+        return $this->belongsTo(User::class, 'id_kadis', 'id_user');
     }
 }

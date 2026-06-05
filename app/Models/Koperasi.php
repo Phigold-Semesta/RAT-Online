@@ -13,19 +13,18 @@ class Koperasi extends Model
 
     protected $fillable = [
         'id_user',
-        'nama_koperasi',
         'jenis_koperasi',
+        'no_badan_hukum',
         'alamat',
         'kecamatan',
         'ketua_koperasi',
         'bendahara_koperasi',
-        'sekertaris_koperasi',
+        'sekretaris_koperasi',
         'jumlah_anggota',
         'tanggal_berdiri',
         'status_koperasi',
     ];
 
-    // Membalikkan relasi ke tabel User
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');

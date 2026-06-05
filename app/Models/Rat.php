@@ -14,6 +14,7 @@ class Rat extends Model
 
     protected $fillable = [
         'id_koperasi',
+        'tahun_buku',
         'tahun_RAT',
         'tanggal_RAT',
         'tempat_RAT',

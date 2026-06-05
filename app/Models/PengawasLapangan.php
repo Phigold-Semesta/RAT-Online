@@ -13,7 +13,6 @@ class PengawasLapangan extends Model
 
     protected $fillable = [
         'id_user',
-        'nama_pengawas',
         'wilayah_tugas',
     ];
 
