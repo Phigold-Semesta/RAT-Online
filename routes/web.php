@@ -67,11 +67,13 @@ Route::middleware(['auth', 'role:koperasi'])->group(function () {
     // 1. Dashboard Koperasi (DIBAIKI: Sekarang memanggil method dashboard di KoperasiController)
     Route::get('/koperasi/dashboard', [KoperasiController::class, 'dashboard'])->name('koperasi.dashboard');
 
-    // 2. Menu Profil Koperasi (DISEMPURNAKAN: Sesuai struktur view profil baru)
-    Route::get('/koperasi/profil', [KoperasiController::class, 'profil'])->name('koperasi.profil');
-    Route::get('/koperasi/profil/edit', [KoperasiController::class, 'profilEdit'])->name('koperasi.profil.edit');
-    Route::put('/koperasi/profil/update', [KoperasiController::class, 'updateProfil'])->name('koperasi.profil.update');
-
+   // 2. Menu Profil Koperasi (DISEMPURNAKAN: Sesuai struktur view profil baru)
+// Pastikan berada di dalam group middleware role:koperasi
+Route::prefix('koperasi')->name('koperasi.')->group(function () {
+    Route::get('/profil', [KoperasiController::class, 'profil'])->name('profil.index');
+    Route::get('/profil/edit', [KoperasiController::class, 'profilEdit'])->name('profil.edit');
+    Route::put('/profil/update', [KoperasiController::class, 'updateProfil'])->name('profil.update');
+});
     // 3. Menu Penilaian Kesehatan (Pemkes) (DISEMPURNAKAN: Sesuai struktur view pemkes baru)
     Route::get('/koperasi/pemkes', [KoperasiController::class, 'pemkesIndex'])->name('koperasi.pemkes.index');
     Route::get('/koperasi/pemkes/create', [KoperasiController::class, 'pemkesCreate'])->name('koperasi.pemkes.create');

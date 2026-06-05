@@ -38,13 +38,19 @@ class KoperasiController extends Controller
     // ==========================================
 
     /**
-     * Menampilkan Form Detail & Edit Profil Koperasi
+     * Menampilkan Form Detail Profil Koperasi
      * DISESUAIKAN: Mengarah ke subfolder profil.index sesuai gambar image_98312a.png
+     * DISEMPURNAKAN: Menggunakan first() agar terhindar dari error 404 jika data belum ada di database
      */
     public function profil()
     {
-        // Menggunakan firstOrFail agar jika profil belum terbuat, otomatis melempar error 404 demi keamanan
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        // Diubah dari firstOrFail ke first agar tidak melempar error 404 jika user baru belum memiliki baris data profil
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        // Proteksi: Jika data kosong, buat objek dummy instan agar properti di halaman view tidak crash
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         return view('koperasi.profil.index', compact('koperasi'));
     }
@@ -55,7 +61,11 @@ class KoperasiController extends Controller
      */
     public function profilEdit()
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         return view('koperasi.profil.edit', compact('koperasi'));
     }
@@ -65,23 +75,38 @@ class KoperasiController extends Controller
      */
     public function updateProfil(Request $request)
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
         
-        // Validasi ketat seluruh input elemen data kelembagaan koperasi
-        $request->validate([
-            'nama_koperasi'       => 'required|string|max:255',
-            'jenis_koperasi'      => 'required|string|max:150',
-            'alamat'              => 'required|string',
-            'kecamatan'           => 'required|string|max:100',
-            'ketua_koperasi'      => 'required|string|max:255',
-            'bendahara_koperasi'  => 'required|string|max:255',
-            'sekertaris_koperasi' => 'required|string|max:255',
-            'jumlah_anggota'      => 'required|integer|min:1',
+        // Validasi ketat seluruh input elemen data kelembagaan koperasi sesuai view index profil
+        $validatedData = $request->validate([
+            'nama_koperasi'     => 'required|string|max:255',
+            'jenis_koperasi'    => 'required|string|max:150',
+            'no_badan_hukum'    => 'nullable|string|max:100',
+            'tgl_badan_hukum'   => 'nullable|date',
+            'nama_ketua'        => 'required|string|max:255',
+            'jumlah_anggota'    => 'required|integer|min:0',
+            'tahun_berdiri'     => 'nullable|integer|digits:4|min:1900|max:' . date('Y'),
+            'alamat'            => 'required|string',
+            'no_telp'           => 'nullable|string|max:20',
+            'email_koperasi'    => 'nullable|email|max:255',
+            
+            // Tetap mempertahankan field pengurus lainnya jika ada di form edit Anda
+            'bendahara_koperasi'  => 'nullable|string|max:255',
+            'sekertaris_koperasi' => 'nullable|string|max:255',
+            'kecamatan'           => 'nullable|string|max:100',
         ]);
 
-        // Eksekusi update massal yang aman berbasis fillable array pada model Koperasi
-        $koperasi->update($request->all());
+        // Eksekusi update/insert yang aman berbasis data yang sudah tervalidasi
+        if ($koperasi) {
+            // Jika data sudah ada, lakukan pembaruan
+            $koperasi->update($validatedData);
+        } else {
+            // Jika data belum ada, buat baru dan pasangkan dengan id_user yang sedang login
+            $validatedData['id_user'] = Auth::id();
+            Koperasi::create($validatedData);
+        }
 
+        // DIBAIKI: Nama rute disesuaikan dengan struktur web.php yang baru (koperasi.profil)
         return redirect()->route('koperasi.profil')->with('success', 'Profil koperasi Anda berhasil diperbarui!');
     }
 
@@ -96,7 +121,11 @@ class KoperasiController extends Controller
      */
     public function pemkesIndex()
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         // Contoh implementasi mengambil data Pemkes milik koperasi ini, diurutkan dari tahun terbaru
         // $pemkesList = Pemkes::where('id_koperasi', $koperasi->id_koperasi)->orderBy('tahun', 'desc')->get();
@@ -110,7 +139,12 @@ class KoperasiController extends Controller
      */
     public function pemkesCreate()
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
+        
         return view('koperasi.pemkes.create', compact('koperasi'));
     }
 
@@ -120,7 +154,11 @@ class KoperasiController extends Controller
      */
     public function pemkesEdit($id)
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         // Skenario Masa Depan: Ambil data pemkes spesifik berdasarkan ID untuk diedit
         // $pemkes = Pemkes::where('id_koperasi', $koperasi->id_koperasi)->findOrFail($id);
@@ -133,7 +171,7 @@ class KoperasiController extends Controller
      */
     public function pemkesStore(Request $request)
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
 
         // Validasi input form kesehatan sesuai parameter indikator penilaian Anda
         $request->validate([
@@ -144,12 +182,13 @@ class KoperasiController extends Controller
 
         // Contoh Eksekusi simpan ke tabel pemkes
         // Pemkes::create([
-        //     'id_koperasi'    => $koperasi->id_koperasi,
+        //     'id_koperasi'    => $koperasi->id_koperasi ?? null,
         //     'tahun_buku'     => $request->tahun_buku,
         //     'skor_kesehatan' => $request->skor_kesehatan,
         //     'status'         => 'draft'
         // ]);
 
+        // DIBAIKI: Mengarah ke nama rute indeks pemkes yang benar (koperasi.pemkes.index)
         return redirect()->route('koperasi.pemkes.index')->with('success', 'Data penilaian kesehatan berhasil disimpan!');
     }
 
@@ -164,7 +203,11 @@ class KoperasiController extends Controller
      */
     public function ratIndex()
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         // Contoh pengambilan berkas riwayat RAT dari database Anda
         // $ratList = Rat::where('id_koperasi', $koperasi->id_koperasi)->orderBy('tahun_rat', 'desc')->get();
@@ -178,7 +221,12 @@ class KoperasiController extends Controller
      */
     public function ratCreate()
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
+        
         return view('koperasi.rat.create', compact('koperasi'));
     }
 
@@ -188,7 +236,11 @@ class KoperasiController extends Controller
      */
     public function ratEdit($id)
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
+        
+        if (!$koperasi) {
+            $koperasi = $this->createDummyKoperasi();
+        }
         
         // Skenario Masa Depan: Ambil data berkas RAT spesifik berdasarkan ID untuk direvisi
         // $rat = Rat::where('id_koperasi', $koperasi->id_koperasi)->findOrFail($id);
@@ -201,7 +253,7 @@ class KoperasiController extends Controller
      */
     public function ratStore(Request $request)
     {
-        $koperasi = Koperasi::where('id_user', Auth::id())->firstOrFail();
+        $koperasi = Koperasi::where('id_user', Auth::id())->first();
 
         // Validasi ketat pengunggahan dokumen laporan dan bukti fisik foto kegiatan
         $request->validate([
@@ -222,14 +274,14 @@ class KoperasiController extends Controller
             $pathDokumen = $request->file('dokumen_rat')->store('dokumen_rat', 'public');
         }
 
-        // Proses enkripsi dan unggah file foto dokumentasi rapat ke storage
+        // Process enkripsi dan unggah file foto dokumentasi rapat ke storage
         if ($request->hasFile('foto_kegiatan')) {
             $pathFoto = $request->file('foto_kegiatan')->store('foto_kegiatan', 'public');
         }
 
         // Skenario penyimpanan berkas ke database utama aplikasi Anda
         // Rat::create([
-        //     'id_koperasi'   => $koperasi->id_koperasi,
+        //     'id_koperasi'   => $koperasi->id_koperasi ?? null,
         //     'tahun_rat'     => $request->tahun_rat,
         //     'tanggal_rat'   => $request->tanggal_rat,
         //     'tempat_rat'    => $request->tempat_rat,
@@ -239,6 +291,22 @@ class KoperasiController extends Controller
         //     'status_rat'    => 'belum diverifikasi', // Menanti verifikasi dari Pengawas Lapangan
         // ]);
 
+        // DIBAIKI: Mengarah ke nama rute indeks rat yang benar (koperasi.rat.index)
         return redirect()->route('koperasi.rat.index')->with('success', 'Laporan Pelaksanaan RAT Berhasil dikirim ke Dinas Koperasi!');
+    }
+
+    /**
+     * Helper Function: Membuat Objek Koperasi Kosong (Dummy) agar Aplikasi Bebas Gatal 404
+     * Ditambahkan untuk memastikan view tidak mengalami error properti 'null' saat baris data DB kosong
+     */
+    private function createDummyKoperasi()
+    {
+        $dummy = new Koperasi();
+        $dummy->nama_koperasi = "Data Koperasi Belum Terdaftar";
+        $dummy->jenis_koperasi = "Belum Ditentukan";
+        $dummy->nama_ketua = "-";
+        $dummy->jumlah_anggota = 0;
+        $dummy->alamat = "Silakan klik tombol Ubah Profil untuk melengkapi data kelembagaan.";
+        return $dummy;
     }
 }

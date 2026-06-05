@@ -71,9 +71,11 @@
                         <a href="{{ route('koperasi.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.dashboard') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
-                        <a href="{{ route('koperasi.profil') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.profil') || request()->routeIs('koperasi.profil.edit') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
-                            Profil Koperasi
-                        </a>
+                        {{-- SOLUSI 1: Menggunakan url() agar aman dari error RouteNotFoundException --}}
+<a href="{{ url('/koperasi/profil') }}" 
+   class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->is('koperasi/profil*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
+    Profil Koperasi
+</a>
                         <a href="{{ route('koperasi.pemkes.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.pemkes.*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Penilaian Kesehatan
                         </a>
