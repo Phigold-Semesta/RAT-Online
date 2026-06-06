@@ -71,13 +71,11 @@
                         <a href="{{ route('koperasi.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.dashboard') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
-                        {{-- SOLUSI 1: Menggunakan url() agar aman dari error RouteNotFoundException --}}
-<a href="{{ url('/koperasi/profil') }}" 
-   class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->is('koperasi/profil*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
-    Profil Koperasi
-</a>
+                        <a href="{{ url('/koperasi/profil') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->is('koperasi/profil*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
+                            Profil Koperasi
+                        </a>
                         <a href="{{ route('koperasi.pemkes.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.pemkes.*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
-                            Penilaian Kesehatan
+                            Pemkes
                         </a>
                         <a href="{{ route('koperasi.rat.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('koperasi.rat.*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Pelaksanaan RAT
@@ -97,23 +95,22 @@
                         </a>
                     @endif
 
-                    {{-- 4. NAVIGASI AKTOR: PA KADIS (KEPALA DINAS) --}}
+                    {{-- 4. NAVIGASI AKTOR: PA KADIS (DISESUAIKAN) --}}
                     @if(auth()->user()->role === 'kadis')
                         <a href="{{ route('kadis.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('kadis.dashboard') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
-                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50 transition">
-                            Grafik Monitoring
+                        <a href="{{ route('kadis.data-koperasi') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('kadis.data-koperasi*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
+                            Data Koperasi
                         </a>
-                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-teal-700 dark:text-teal-400 bg-white dark:bg-teal-950/30 border border-teal-300 dark:border-teal-500/20 hover:bg-teal-50 dark:hover:bg-teal-950/60 shadow-sm transition">
-                            Persetujuan Laporan
+                        <a href="{{ route('kadis.laporan.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('kadis.laporan.*') ? 'bg-white text-teal-700 dark:bg-teal-950 dark:text-teal-400 border border-teal-300 dark:border-teal-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-teal-700 dark:hover:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/50' }}">
+                            Laporan & Validasi
                         </a>
                     @endif
 
                 </div>
 
                 <div class="flex items-center gap-4">
-                    
                     <button id="theme-toggle" type="button" class="p-2.5 rounded-full text-slate-500 dark:text-slate-400 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-700 transition duration-300 focus:outline-none">
                         <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zm4 4.707a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14 15.707a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm-4 1.293a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4-2.293a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2-4.293a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM7 10a3 3 0 116 0 3 3 0 01-6 0z"></path>
@@ -135,7 +132,6 @@
                         </button>
                     </form>
                 </div>
-
             </div>
         </div>
     </nav>
@@ -145,6 +141,7 @@
         @yield('content')
     </main>
 
+    {{-- Script & Toast tetap sama seperti sebelumnya --}}
     @if(session('success') || session('error'))
         <div id="toast" class="fixed bottom-5 right-5 z-50 transform transition-all duration-500 translate-y-10 opacity-0">
             <div class="flex items-center p-4 rounded-2xl shadow-2xl border backdrop-blur-md {{ session('success') ? 'bg-teal-50 dark:bg-teal-950/90 border-teal-300 dark:border-teal-500 text-teal-800 dark:text-teal-200' : 'bg-rose-50 dark:bg-rose-950/90 border-rose-300 dark:border-rose-500 text-rose-800 dark:text-rose-200' }}">
@@ -168,7 +165,6 @@
         const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-        // Sesuaikan tampilan icon tombol saat pertama kali halaman dibuka
         if (document.documentElement.classList.contains('dark')) {
             themeToggleLightIcon.classList.remove('hidden');
         } else {
@@ -178,11 +174,9 @@
         const themeToggleBtn = document.getElementById('theme-toggle');
 
         themeToggleBtn.addEventListener('click', function() {
-            // Tukar penampakan icon di dalam tombol
             themeToggleDarkIcon.classList.toggle('hidden');
             themeToggleLightIcon.classList.toggle('hidden');
 
-            // Eksekusi mutasi kelas DOM elemen HTML induk dan rekam status ke localStorage
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
@@ -192,6 +186,5 @@
             }
         });
     </script>
-
 </body>
 </html>

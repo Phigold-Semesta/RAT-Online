@@ -96,8 +96,16 @@ Route::middleware(['auth', 'role:pengawas'])->group(function () {
 });
 
 // --- KELOMPOK HAK AKSES: KEPALA DINAS ---
-Route::middleware(['auth', 'role:kadis'])->group(function () {
-    Route::get('/kadis/dashboard', function () { 
-        return view('kadis.dashboard'); 
-    })->name('kadis.dashboard');
+Route::middleware(['auth', 'role:kadis'])->prefix('kadis')->name('kadis.')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\KadisController::class, 'dashboard'])->name('dashboard');
+    
+    // Data Koperasi
+    Route::get('/data-koperasi', [App\Http\Controllers\KadisController::class, 'dataKoperasi'])->name('data-koperasi');
+    
+    // Laporan & Validasi
+    Route::get('/laporan', [App\Http\Controllers\KadisController::class, 'laporanIndex'])->name('laporan.index');
+    Route::post('/laporan/{id}/validasi', [App\Http\Controllers\KadisController::class, 'validasiLaporan'])->name('laporan.validasi');
+    
 });
