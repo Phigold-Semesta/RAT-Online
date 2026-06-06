@@ -31,7 +31,7 @@ class PengawasController extends Controller
      */
     public function tugas_index()
     {
-        $tugas = Koperasi::where('id_pengawas', Auth::id())
+        $tugas = Koperasi::where('id_user', Auth::id())
                          ->latest()
                          ->paginate(10);
         return view('pengawas.tugas.index', compact('tugas'));
@@ -71,14 +71,16 @@ class PengawasController extends Controller
                          ->with('success', 'Hasil verifikasi lapangan berhasil disimpan.');
     }
 
-    /**
+   /**
      * READ: Riwayat Kunjungan
      */
     public function riwayat_index()
     {
-        $riwayat = Laporan::where('id_pengawas', Auth::id())
+        // Menggunakan id_user karena kolom id_pengawas tidak ditemukan di tabel laporan
+        $riwayat = Laporan::where('id_user', Auth::id())
                           ->latest()
                           ->paginate(10);
+                          
         return view('pengawas.riwayat.index', compact('riwayat'));
     }
 
