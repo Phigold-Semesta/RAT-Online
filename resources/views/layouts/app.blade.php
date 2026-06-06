@@ -82,20 +82,20 @@
                         </a>
                     @endif
 
-                    {{-- 3. NAVIGASI AKTOR: PENGAWAS LAPANGAN --}}
+                    {{-- 3. NAVIGASI AKTOR: PENGAWAS LAPANGAN (DISEMPURNAKAN) --}}
                     @if(auth()->user()->role === 'pengawas')
                         <a href="{{ route('pengawas.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('pengawas.dashboard') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Dashboard
                         </a>
-                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50 transition">
-                            Daftar Koperasi
+                        <a href="{{ route('pengawas.tugas.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('pengawas.tugas.*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
+                            Daftar Tugas
                         </a>
-                        <a href="#" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50 transition">
-                            Periksa Lapangan
+                        <a href="{{ route('pengawas.riwayat.index') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('pengawas.riwayat.*') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
+                            Riwayat
                         </a>
                     @endif
 
-                    {{-- 4. NAVIGASI AKTOR: PA KADIS (DISESUAIKAN) --}}
+                    {{-- 4. NAVIGASI AKTOR: PA KADIS --}}
                     @if(auth()->user()->role === 'kadis')
                         <a href="{{ route('kadis.dashboard') }}" class="px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition {{ request()->routeIs('kadis.dashboard') ? 'bg-white text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400 border border-slate-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-none' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/50' }}">
                             Dashboard
@@ -141,7 +141,6 @@
         @yield('content')
     </main>
 
-    {{-- Script & Toast tetap sama seperti sebelumnya --}}
     @if(session('success') || session('error'))
         <div id="toast" class="fixed bottom-5 right-5 z-50 transform transition-all duration-500 translate-y-10 opacity-0">
             <div class="flex items-center p-4 rounded-2xl shadow-2xl border backdrop-blur-md {{ session('success') ? 'bg-teal-50 dark:bg-teal-950/90 border-teal-300 dark:border-teal-500 text-teal-800 dark:text-teal-200' : 'bg-rose-50 dark:bg-rose-950/90 border-rose-300 dark:border-rose-500 text-rose-800 dark:text-rose-200' }}">

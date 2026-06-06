@@ -89,10 +89,27 @@ Route::prefix('koperasi')->name('koperasi.')->group(function () {
 });
 
 // --- KELOMPOK HAK AKSES: PENGAWAS LAPANGAN ---
-Route::middleware(['auth', 'role:pengawas'])->group(function () {
-    Route::get('/pengawas/dashboard', function () { 
-        return view('pengawas.dashboard'); 
-    })->name('pengawas.dashboard');
+Route::middleware(['auth', 'role:pengawas'])->prefix('pengawas')->name('pengawas.')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\PengawasController::class, 'dashboard'])->name('dashboard');
+    
+    // Daftar Tugas Koperasi
+    Route::get('/tugas', [App\Http\Controllers\PengawasController::class, 'tugas_index'])->name('tugas.index');
+    
+    // Form Verifikasi
+    Route::get('/tugas/{id}/verifikasi', [App\Http\Controllers\PengawasController::class, 'formVerifikasi'])->name('tugas.form');
+    
+    // Simpan Hasil Verifikasi
+    Route::post('/tugas/{id}/simpan', [App\Http\Controllers\PengawasController::class, 'simpanVerifikasi'])->name('tugas.simpan');
+    
+    // Riwayat Kunjungan
+    Route::get('/riwayat', [App\Http\Controllers\PengawasController::class, 'riwayat_index'])->name('riwayat.index');
+    
+    // Update & Hapus (CRUD Lanjutan)
+    Route::put('/riwayat/{id}/update', [App\Http\Controllers\PengawasController::class, 'updateVerifikasi'])->name('riwayat.update');
+    Route::delete('/riwayat/{id}/hapus', [App\Http\Controllers\PengawasController::class, 'hapusVerifikasi'])->name('riwayat.hapus');
+
 });
 
 // --- KELOMPOK HAK AKSES: KEPALA DINAS ---
